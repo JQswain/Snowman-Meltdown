@@ -25,7 +25,7 @@ def display_game_state(mistakes, secret_word, guessed_letters):
 def play_game():
     secret_word = get_random_word()
     print("Welcome to Snowman Meltdown!")
-    print("Secret word selected: " + secret_word)  # for testing, later remove this line
+    #print("Secret word selected: " + secret_word)  # for testing, later remove this line
 
     # TODO: Build your game loop here.
     mistake_counter = 0
@@ -34,21 +34,36 @@ def play_game():
         display_word = display_game_state(mistake_counter, secret_word, guessed_letters)
         if display_word.replace(' ', '') == secret_word:
             print("Congratulations! You guessed the secret word!")
-            break
-        elif mistake_counter == 3:
-            print("Sorry, the Snowman Melted")
-            break
+            response = input("Would you like to play again? (y/n): ")
+            if response.lower() == 'y':
+                mistake_counter = 0
+                secret_word = get_random_word()
+                guessed_letters = []
+                continue
+            else:
+                break
         guess = input("Guess a letter: ").lower()
-        if guess in guessed_letters:
-            print("You already guessed that letter!")
-        elif guess not in guessed_letters:
-            print("You guessed:", guess)
-        if guess not in secret_word:
-            mistake_counter += 1
-        if guess in secret_word:
-            guessed_letters.append(guess)
+        if guess.isalpha() and len(guess) == 1:
+            if guess in guessed_letters:
+                print("You already guessed that letter!")
+            elif guess not in guessed_letters:
+                print("You guessed:", guess, f"\n")
+            if guess not in secret_word:
+                mistake_counter += 1
+            if guess in secret_word:
+                guessed_letters.append(guess)
+        else:
+            print("Please enter a single letter.")
         if mistake_counter == 3:
             print("Sorry, the Snowman Melted")
-            break
-    print("Thank you for playing!")
+            response = input("Would you like to play again? (y/n): ")
+            if response.lower() == 'y':
+                mistake_counter = 0
+                secret_word = get_random_word()
+                guessed_letters = []
+                continue
+            else:
+                break
+    print(f"\nThank you for playing!")
+
 
